@@ -1,16 +1,16 @@
-# DepsGuard 🛡️
+# depsguard 🛡️
 
 **An MCP server that gives AI coding assistants the context to make safe
 dependency decisions** — and a policy guardrail that returns an
 `ALLOW / WARN / BLOCK` verdict an agent or CI step can act on.
 
-DepsGuard is a compact AI-native SDLC demonstrator: it exposes dependency
+depsguard is a compact AI-native SDLC demonstrator: it exposes dependency
 intelligence through MCP, gives agents executable guardrails before dependency
 changes, evaluates its own tool behavior through CI, and demonstrates
 human-in-the-loop approval with LangGraph.
 
 Built for an **AI-native SDLC**: when Claude Code, Cursor, or Copilot is about
-to add or upgrade a dependency, DepsGuard feeds it decision-grade data from
+to add or upgrade a dependency, depsguard feeds it decision-grade data from
 [Google's deps.dev](https://deps.dev) — licenses, source, and the OSV/GHSA
 security advisories affecting that exact version. Ships with an **agent skill**,
 an **evaluation harness**, a **Dockerfile**, and **CI**.
@@ -28,7 +28,7 @@ RubyGems. **No API key. No account. Free.**
 ## Why this matters for AI-native SDLC
 
 AI coding assistants can add or upgrade dependencies faster than humans can
-review their security and licensing implications. DepsGuard gives the assistant
+review their security and licensing implications. depsguard gives the assistant
 a structured tool interface and a policy verdict before code is changed.
 
 This project demonstrates:
@@ -44,7 +44,7 @@ This project demonstrates:
 See [`docs/demo.md`](docs/demo.md) for a real terminal transcript showing:
 
 - `urllib3` 1.26.4 proposed as a dependency change
-- a direct DepsGuard policy call
+- a direct depsguard policy call
 - deps.dev advisories found for that exact version
 - `BLOCK` with `--max-severity medium`
 - a PR-style dependency risk report
@@ -74,8 +74,8 @@ just call the guardrail for a one-shot decision. The bundled
 Requires [`uv`](https://docs.astral.sh/uv/) (recommended) or pip + Python 3.10+.
 
 ```bash
-git clone https://github.com/oandronachi/DepsGuard.git
-cd DepsGuard
+git clone https://github.com/oandronachi/depsguard.git
+cd depsguard
 uv sync --extra dev     # or: pip install -e ".[dev]"
 uv run depsguard        # starts the server on stdio
 ```
@@ -114,7 +114,7 @@ entry. Use the **absolute path** to `uv`; find it with `which uv`.
   "mcpServers": {
     "depsguard": {
       "command": "/absolute/path/to/uv",
-      "args": ["--directory", "/absolute/path/to/DepsGuard", "run", "depsguard"]
+      "args": ["--directory", "/absolute/path/to/depsguard", "run", "depsguard"]
     }
   }
 }
@@ -127,7 +127,7 @@ path matters.
 **Claude Code** — one command:
 
 ```bash
-claude mcp add depsguard -- uv --directory /absolute/path/to/DepsGuard run depsguard
+claude mcp add depsguard -- uv --directory /absolute/path/to/depsguard run depsguard
 ```
 
 ## Try these prompts
@@ -160,11 +160,11 @@ The server is **read-only** and makes no destructive or authenticated calls.
 ## LangGraph dependency gate example
 
 [`examples/langgraph_dependency_gate.py`](examples/langgraph_dependency_gate.py)
-demonstrates how DepsGuard can be used inside an agentic SDLC workflow:
+demonstrates how depsguard can be used inside an agentic SDLC workflow:
 
 1. A proposed dependency add/upgrade enters a LangGraph workflow.
-2. The workflow calls DepsGuard through MCP.
-3. DepsGuard returns `ALLOW`, `WARN`, or `BLOCK`.
+2. The workflow calls depsguard through MCP.
+3. depsguard returns `ALLOW`, `WARN`, or `BLOCK`.
 4. `BLOCK` stops the change.
 5. `WARN` triggers a human approval step.
 6. The workflow emits a PR-style dependency risk report.
@@ -178,7 +178,7 @@ flowchart TD
     Developer["Developer asks Claude to add or upgrade a dependency"]
     Claude["Claude proposes a package and version"]
     Gate["LangGraph dependency gate"]
-    Server["DepsGuard MCP server"]
+    Server["depsguard MCP server"]
     Data["deps.dev / OSV advisory and license data"]
     Verdict{"ALLOW / WARN / BLOCK"}
     Apply["Claude applies the dependency change"]
@@ -208,7 +208,7 @@ Example Claude prompt:
 Upgrade urllib3 to 1.26.4.
 
 Before changing files:
-1. Run the DepsGuard LangGraph dependency gate.
+1. Run the depsguard LangGraph dependency gate.
 2. If the result is ALLOW, apply the change.
 3. If the result is WARN, stop and ask me for approval.
 4. If the result is BLOCK, do not apply the change. Explain why and suggest a safer version.
@@ -231,23 +231,23 @@ Claude wants to change dependency
         |
 LangGraph receives package/version
         |
-LangGraph calls DepsGuard through MCP
+LangGraph calls depsguard through MCP
         |
-DepsGuard checks deps.dev / OSV advisory data
+depsguard checks deps.dev / OSV advisory data
         |
-DepsGuard returns verdict
+depsguard returns verdict
         |
 LangGraph converts verdict into final action/report
         |
 Claude acts on that decision
 ```
 
-If DepsGuard returns `BLOCK`, Claude should respond like:
+If depsguard returns `BLOCK`, Claude should respond like:
 
 ```text
 I did not update urllib3 to 1.26.4.
 
-DepsGuard blocked the change because the selected version has advisories above
+depsguard blocked the change because the selected version has advisories above
 the configured policy threshold.
 
 Required action:
@@ -260,10 +260,10 @@ Dependency gate result:
 - Policy max severity: medium
 ```
 
-If DepsGuard returns `WARN`, Claude should pause:
+If depsguard returns `WARN`, Claude should pause:
 
 ```text
-DepsGuard returned WARN for this dependency change.
+depsguard returned WARN for this dependency change.
 
 I need human approval before applying it.
 
@@ -277,14 +277,14 @@ Approve this change?
 If approved, Claude continues. If rejected, Claude stops or proposes another
 version.
 
-If DepsGuard returns `ALLOW`, Claude applies the change and includes a PR note
+If depsguard returns `ALLOW`, Claude applies the change and includes a PR note
 like:
 
 ```markdown
 ## Dependency Gate Report
 
 - Package: `pypi:example@1.2.3`
-- DepsGuard verdict: `ALLOW`
+- depsguard verdict: `ALLOW`
 - Final verdict: `ALLOW`
 - Required agent action: Apply the dependency change.
 
@@ -307,7 +307,7 @@ BLOCK -> red check, merge blocked
 
 So the real value is that Claude is no longer just "being careful" in natural
 language. The dependency decision becomes an enforced workflow: Claude proposes,
-DepsGuard evaluates, LangGraph routes, and the final report becomes part of the
+depsguard evaluates, LangGraph routes, and the final report becomes part of the
 PR record.
 
 The final action is deterministic:
@@ -320,13 +320,13 @@ The final action is deterministic:
 Run:
 
 ```bash
-# Install the optional example dependencies declared by DepsGuard.
+# Install the optional example dependencies declared by depsguard.
 uv sync --extra examples
 
-# Default path: call DepsGuard through MCP stdio and block on medium+ advisories.
+# Default path: call depsguard through MCP stdio and block on medium+ advisories.
 uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --max-severity medium
 
-# Local debugging path: call the DepsGuard policy function directly, without MCP stdio.
+# Local debugging path: call the depsguard policy function directly, without MCP stdio.
 uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --transport direct
 
 # Non-interactive approval demo: approve WARN outcomes automatically.
@@ -340,16 +340,16 @@ uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 \
 
 ## Future extension: A2A
 
-DepsGuard currently focuses on the MCP tool and guardrail layer: an AI
-assistant or workflow can call DepsGuard to evaluate dependency risk before
+depsguard currently focuses on the MCP tool and guardrail layer: an AI
+assistant or workflow can call depsguard to evaluate dependency risk before
 allowing a package change to proceed.
 
 In a larger enterprise SDLC, this could be extended with an A2A-compatible
 dependency-review agent. That agent could coordinate with separate security,
 license-compliance, build-validation, and PR-generation agents, while using
-DepsGuard as the MCP-backed policy tool for dependency intelligence.
+depsguard as the MCP-backed policy tool for dependency intelligence.
 
-This would keep DepsGuard small and focused: it remains the executable
+This would keep depsguard small and focused: it remains the executable
 dependency-policy service, while A2A handles cross-agent coordination across
 the wider engineering workflow.
 

@@ -1,9 +1,9 @@
-"""LangGraph dependency gate example for DepsGuard.
+"""LangGraph dependency gate example for depsguard.
 
 This is a small, runnable example of an agentic dependency-review workflow:
 
 1. A proposed dependency add/upgrade enters a LangGraph StateGraph.
-2. The graph calls DepsGuard's evaluate_dependency_policy tool.
+2. The graph calls depsguard's evaluate_dependency_policy tool.
 3. ALLOW proceeds, BLOCK fails closed, and WARN pauses for approval.
 4. The graph emits a PR-style Markdown report.
 
@@ -184,7 +184,7 @@ async def evaluate_policy_node(state: GateState) -> dict[str, Any]:
             "licenses": [],
             "advisories": [],
             "reason": (
-                "DepsGuard policy lookup failed closed: "
+                "depsguard policy lookup failed closed: "
                 f"{type(exc).__name__}: {exc}"
             ),
         }
@@ -219,7 +219,7 @@ def approval_node(state: GateState) -> dict[str, Any]:
             {
                 "kind": "dependency_policy_warning",
                 "message": (
-                    "DepsGuard returned WARN. A human must approve before "
+                    "depsguard returned WARN. A human must approve before "
                     "proceeding."
                 ),
                 "package": state["policy"].get("package"),
@@ -304,7 +304,7 @@ def render_report(state: GateState, pending: bool = False) -> str:
         "## Dependency Gate Report",
         "",
         f"- Package: `{policy.get('package', package_label(state))}`",
-        f"- DepsGuard verdict: `{verdict}`",
+        f"- depsguard verdict: `{verdict}`",
         f"- Workflow decision: `{decision}`",
         f"- Status: `{status}`",
         f"- Final verdict: `{final_verdict}`",
@@ -346,7 +346,7 @@ def render_report(state: GateState, pending: bool = False) -> str:
         [
             "",
             (
-                "> Note: DepsGuard reports advisories affecting the selected "
+                "> Note: depsguard reports advisories affecting the selected "
                 "package version directly; it does not resolve the full "
                 "transitive dependency graph."
             ),
@@ -497,7 +497,7 @@ def jsonable(value: Any) -> Any:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a LangGraph dependency gate backed by DepsGuard.",
+        description="Run a LangGraph dependency gate backed by depsguard.",
     )
     parser.add_argument(
         "ecosystem",

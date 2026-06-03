@@ -1,12 +1,26 @@
 [project]
 name = "depsguard"
 version = "0.1.0"
-description = "An MCP server that gives AI coding assistants decision-grade dependency context (licenses, CVEs) plus an ALLOW/WARN/BLOCK policy guardrail — context engineering for an AI-native SDLC. Covers Cargo, Maven, npm, PyPI, Go, NuGet, RubyGems. No API key."
+description = """An MCP server that gives AI coding assistants decision-grade \
+dependency context (licenses, CVEs) plus an ALLOW/WARN/BLOCK policy guardrail \
+— context engineering for an AI-native SDLC. Covers Cargo, Maven, npm, PyPI, \
+Go, NuGet, RubyGems. No API key."""
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [{ name = "Ovidiu Andronachi" }]
-keywords = ["mcp", "model-context-protocol", "agentic", "ai-sdlc", "context-engineering", "guardrails", "evals", "supply-chain", "deps.dev", "claude-code"]
+keywords = [
+    "mcp",
+    "model-context-protocol",
+    "agentic",
+    "ai-sdlc",
+    "context-engineering",
+    "guardrails",
+    "evals",
+    "supply-chain",
+    "deps.dev",
+    "claude-code",
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -25,8 +39,8 @@ examples = ["langgraph>=1.2.2"]
 depsguard = "depsguard.server:main"
 
 [project.urls]
-Homepage = "https://github.com/oandronachi/DepsGuard"
-Issues = "https://github.com/oandronachi/DepsGuard/issues"
+Homepage = "https://github.com/oandronachi/depsguard"
+Issues = "https://github.com/oandronachi/depsguard/issues"
 
 [build-system]
 requires = ["hatchling"]

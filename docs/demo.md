@@ -1,13 +1,13 @@
 # Demo transcript
 
-This transcript shows a direct DepsGuard policy check before a proposed
+This transcript shows a direct depsguard policy check before a proposed
 dependency change is applied.
 
 Scenario:
 
 - Proposed dependency change: `pypi:urllib3@1.26.4`
 - Policy: `max_severity="medium"`
-- Expected result: advisories are found and DepsGuard returns `BLOCK`
+- Expected result: advisories are found and depsguard returns `BLOCK`
 - PR action: attach the rendered dependency risk report and do not apply the
   dependency change
 
@@ -137,7 +137,7 @@ PR-style report rendered from the policy result:
 ## Dependency Gate Report
 
 - Package: `pypi:urllib3@1.26.4`
-- DepsGuard verdict: `BLOCK`
+- depsguard verdict: `BLOCK`
 - Policy max severity: `medium`
 - Worst severity: `high`
 - Licenses: `MIT`

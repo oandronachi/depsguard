@@ -1,4 +1,4 @@
-"""Evaluation harness for DepsGuard's agent-facing tools.
+"""Evaluation harness for depsguard's agent-facing tools.
 
 An agent is only as reliable as the tools it depends on. This harness treats the
 MCP tools as a dependency under test and scores them on a labelled set of real

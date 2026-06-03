@@ -1,4 +1,4 @@
-"""Tests for DepsGuard.
+"""Tests for depsguard.
 
 These run fully offline: deps.dev HTTP calls are mocked, and the MCP tools are
 exercised through the server module directly. Run with:  pytest -q

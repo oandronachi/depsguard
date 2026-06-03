@@ -1,4 +1,4 @@
-"""DepsGuard — an MCP server that gives AI coding assistants dependency context.
+"""depsguard — an MCP server that gives AI coding assistants dependency context.
 
 Part of an AI-native SDLC: when an agent (Claude Code, Cursor, Copilot) is about
 to add or upgrade a dependency, these tools feed it decision-grade context from
@@ -22,7 +22,7 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 
 API_BASE = "https://api.deps.dev/v3"
-USER_AGENT = "depsguard-mcp/0.1 (+https://github.com/oandronachi/DepsGuard)"
+USER_AGENT = "depsguard-mcp/0.1 (+https://github.com/oandronachi/depsguard)"
 TIMEOUT = httpx.Timeout(15.0)
 
 # deps.dev expects the ecosystem in UPPER CASE in the path.

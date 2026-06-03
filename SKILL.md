@@ -5,13 +5,13 @@ description: >-
   dependency in any ecosystem (PyPI, npm, Cargo/Rust, Maven/Java-Kotlin, Go,
   NuGet, RubyGems), or when a user asks whether a package or version is safe,
   what license it uses, or which CVEs affect it. Provides decision-grade
-  dependency context and an ALLOW/WARN/BLOCK policy verdict via the DepsGuard
+  dependency context and an ALLOW/WARN/BLOCK policy verdict via the depsguard
   MCP server.
 ---
 
 # Dependency Guardrail
 
-This skill governs how to use the **DepsGuard** MCP tools so that dependency
+This skill governs how to use the **depsguard** MCP tools so that dependency
 decisions in an AI-native SDLC are made on real data, not guesses.
 
 ## When to use
