@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/oandronachi/depsguard/actions/workflows/ci.yml/badge.svg)](https://github.com/oandronachi/depsguard/actions/workflows/ci.yml)
 [![Evals](https://github.com/oandronachi/depsguard/actions/workflows/evals.yml/badge.svg)](https://github.com/oandronachi/depsguard/actions/workflows/evals.yml)
-[![License](https://img.shields.io/github/license/oandronachi/depsguard)](./LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](./pyproject.toml)
 [![MCP](https://img.shields.io/badge/MCP-server-6f42c1)](./README.md)
 
