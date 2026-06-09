@@ -1,5 +1,7 @@
 # depsguard 🛡️
 
+[![CI](https://github.com/oandronachi/depsguard/actions/workflows/ci.yml/badge.svg)](https://github.com/oandronachi/depsguard/actions/workflows/ci.yml)
+
 **An MCP server that gives AI coding assistants the context to make safe
 dependency decisions** — and a policy guardrail that returns an
 `ALLOW / WARN / BLOCK` verdict an agent or CI step can act on.
