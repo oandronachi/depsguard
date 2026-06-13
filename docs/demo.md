@@ -14,7 +14,7 @@ Scenario:
 Command:
 
 ```powershell
-uv run --no-sync --python 3.12 python -c @'
+.\.venv\Scripts\python.exe -c @'
 import asyncio
 import json
 from depsguard.server import evaluate_dependency_policy

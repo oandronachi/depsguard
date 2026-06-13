@@ -18,7 +18,7 @@ in the agent's path.
 | **Data source** | Google's [deps.dev](https://deps.dev) (Open Source Insights) v3 API — licenses, source repos, OSV/GHSA advisories. No API key, no account, free. Data is CC-BY 4.0. |
 | **Coverage** | 7 ecosystems — Cargo (Rust), Maven (Java/Kotlin), npm, PyPI, Go, NuGet, RubyGems — including the ones automotive and systems software ship in. |
 | **Surface** | One server module (< 300 lines), an agent skill, an evaluation harness, a LangGraph example, GitHub Actions CI, and a hardened Docker image. |
-| **Stack** | Python 3.10+, the official MCP Python SDK (FastMCP), `httpx`, `uv` + `hatchling`, `pytest`, GitHub Actions, Docker, LangGraph. MIT licensed. |
+| **Stack** | Python 3.10+, the official MCP Python SDK (FastMCP), `httpx`, `venv` + `hatchling`, `pytest`, GitHub Actions, Docker, LangGraph. MIT licensed. |
 
 ---
 
@@ -134,9 +134,9 @@ are within policy. The LangGraph gate routes `WARN` to a human-approval step
 
 ### 8. Reproducible, namespaced packaging
 The project installs under a single `depsguard` package (no generic top-level
-names leaking into site-packages), the Docker image builds from the checked-in
-`uv.lock` with `uv sync --locked` for byte-reproducible dependencies, and CI
-pins the Python version and verifies the lockfile is current.
+names leaking into site-packages), local development and CI run from an explicit
+`.venv`, and the Docker image still builds from the checked-in `uv.lock` with
+`uv sync --locked` for byte-reproducible container dependencies.
 
 ---
 

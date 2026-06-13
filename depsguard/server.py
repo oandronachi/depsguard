@@ -300,7 +300,7 @@ async def evaluate_dependency_policy(
 
 
 def main() -> None:
-    """Console entry point so the server is runnable via `depsguard` / `uvx`."""
+    """Console entry point so the server is runnable after venv installation."""
     mcp.run()  # stdio transport
 
 

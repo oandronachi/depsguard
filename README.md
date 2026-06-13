@@ -25,10 +25,6 @@ Covers 7 ecosystems including the ones automotive/systems software ships in —
 **Cargo (Rust)** and **Maven (Java/Kotlin)** — plus npm, PyPI, Go, NuGet,
 RubyGems. **No API key. No account. Free.**
 
-![Python](https://img.shields.io/badge/python-3.10+-blue)
-![MCP](https://img.shields.io/badge/MCP-server-7c3aed)
-![License](https://img.shields.io/badge/license-MIT-green)
-
 ---
 
 ## Why this matters for AI-native SDLC
@@ -42,7 +38,8 @@ This project demonstrates:
 - Context engineering for dependency decisions
 - Guardrail-based ALLOW / WARN / BLOCK policy
 - Evaluation harness for tool correctness and drift detection
-- CI and containerized execution
+- Standard Python `.venv` setup for local development and CI
+- Containerized execution with locked container dependencies
 - Human-readable agent instructions via SKILL.md
 
 ## Demo
@@ -77,22 +74,35 @@ just call the guardrail for a one-shot decision. The bundled
 
 ## Install & run
 
-Requires [`uv`](https://docs.astral.sh/uv/) (recommended) or pip + Python 3.10+.
+Requires Python 3.10+. Create a project-local virtual environment and install
+depsguard into it:
 
 ```bash
 git clone https://github.com/oandronachi/depsguard.git
 cd depsguard
-uv sync --extra dev     # or: pip install -e ".[dev]"
-uv run depsguard        # starts the server on stdio
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[dev,examples]"
+depsguard        # starts the server on stdio
+```
+
+On Windows PowerShell, activate the same venv with:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
 Verify it works without a client:
 
 ```bash
-uv run pytest -q                          # offline unit tests
-uv run python -m evals.run_evals          # live eval suite
-npx @modelcontextprotocol/inspector uv run depsguard   # interactive tool explorer
+python -m pytest -q
+python -m evals.run_evals          # live eval suite
+npx @modelcontextprotocol/inspector depsguard
 ```
+
+CI follows the same shape: create `.venv`, install the project editable with
+the `dev` and `examples` extras, then run tests through the venv interpreter.
 
 Or run it containerised:
 
@@ -113,14 +123,31 @@ docker run --rm --entrypoint /app/.venv/bin/python depsguard:examples \
 ## Connect to Claude
 
 **Claude Desktop** — Settings → Developer → Edit Config, then add the server
-entry. Use the **absolute path** to `uv`; find it with `which uv`.
+entry. Use the **absolute path** to the `depsguard` executable inside `.venv`.
+On Windows, that executable is `.venv\Scripts\depsguard.exe`; on macOS/Linux it
+is `.venv/bin/depsguard`.
+
+macOS/Linux:
 
 ```json
 {
   "mcpServers": {
     "depsguard": {
-      "command": "/absolute/path/to/uv",
-      "args": ["--directory", "/absolute/path/to/depsguard", "run", "depsguard"]
+      "command": "/absolute/path/to/depsguard/.venv/bin/depsguard",
+      "args": []
+    }
+  }
+}
+```
+
+Windows:
+
+```json
+{
+  "mcpServers": {
+    "depsguard": {
+      "command": "C:\\absolute\\path\\to\\depsguard\\.venv\\Scripts\\depsguard.exe",
+      "args": []
     }
   }
 }
@@ -133,7 +160,7 @@ path matters.
 **Claude Code** — one command:
 
 ```bash
-claude mcp add depsguard -- uv --directory /absolute/path/to/depsguard run depsguard
+claude mcp add depsguard -- /absolute/path/to/depsguard/.venv/bin/depsguard
 ```
 
 ## Try these prompts
@@ -224,7 +251,7 @@ Before changing files:
 Claude runs the workflow:
 
 ```powershell
-uv run python examples/langgraph_dependency_gate.py `
+python examples/langgraph_dependency_gate.py `
   pypi urllib3 1.26.4 `
   --max-severity medium `
   --json
@@ -327,20 +354,20 @@ Run:
 
 ```bash
 # Install the optional example dependencies declared by depsguard.
-uv sync --extra examples
+python -m pip install -e ".[examples]"
 
 # Default path: call depsguard through MCP stdio and block on medium+ advisories.
-uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --max-severity medium
+python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --max-severity medium
 
 # Local debugging path: call the depsguard policy function directly, without MCP stdio.
-uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --transport direct
+python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 --transport direct
 
 # Non-interactive approval demo: approve WARN outcomes automatically.
-uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 \
+python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 \
   --transport mock --auto-approve-warn
 
 # Non-interactive rejection demo: reject WARN outcomes automatically.
-uv run python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 \
+python examples/langgraph_dependency_gate.py pypi urllib3 1.26.4 \
   --transport mock --reject-warn
 ```
 

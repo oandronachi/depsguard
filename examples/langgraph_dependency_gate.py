@@ -7,7 +7,8 @@ This is a small, runnable example of an agentic dependency-review workflow:
 3. ALLOW proceeds, BLOCK fails closed, and WARN pauses for approval.
 4. The graph emits a PR-style Markdown report.
 
-Default mode uses a real MCP stdio client and launches `uv run depsguard`.
+Default mode uses a real MCP stdio client and launches depsguard with the
+active Python interpreter. In normal use, run this from the project `.venv`.
 Use `--transport direct` to call the local Python tool function directly, or
 `--transport mock` for a deterministic offline demo.
 """
@@ -29,6 +30,8 @@ Transport = Literal["stdio", "direct", "mock"]
 ApprovalMode = Literal["interrupt", "approve", "reject"]
 
 SEVERITY_ORDER = ["low", "medium", "high", "critical"]
+DEFAULT_SERVER_COMMAND = sys.executable
+DEFAULT_SERVER_ARGS = ["-m", "depsguard.server"]
 
 
 class GateState(TypedDict, total=False):
@@ -73,8 +76,8 @@ async def call_policy(state: GateState) -> dict[str, Any]:
     if transport == "stdio":
         return await call_policy_stdio(
             request,
-            state.get("server_command", "uv"),
-            state.get("server_args", ["run", "depsguard"]),
+            state.get("server_command", DEFAULT_SERVER_COMMAND),
+            state.get("server_args", DEFAULT_SERVER_ARGS),
         )
     raise ValueError(f"Unknown transport: {transport}")
 
@@ -442,7 +445,7 @@ async def run(args: argparse.Namespace) -> int:
     elif args.reject_warn:
         approval_mode = "reject"
 
-    server_args = args.server_arg if args.server_arg else ["run", "depsguard"]
+    server_args = args.server_arg if args.server_arg else list(DEFAULT_SERVER_ARGS)
     initial_state: GateState = {
         "ecosystem": args.ecosystem,
         "name": args.name,
@@ -517,13 +520,16 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     )
     parser.add_argument(
         "--server-command",
-        default="uv",
+        default=DEFAULT_SERVER_COMMAND,
         help="MCP stdio server command for --transport stdio.",
     )
     parser.add_argument(
         "--server-arg",
         action="append",
-        help="MCP stdio server argument. Repeat to override the default: run depsguard.",
+        help=(
+            "MCP stdio server argument. Repeat to override the default: "
+            "-m depsguard.server."
+        ),
     )
 
     approval = parser.add_mutually_exclusive_group()

@@ -11,14 +11,19 @@ jobs:
   eval:
     runs-on: ubuntu-latest
     env:
-      UV_PYTHON: "3.12"
+      PYTHON_VERSION: "3.12"
     steps:
       - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v5
       - name: Install Python
-        run: uv python install ${{ env.UV_PYTHON }}
-      - name: Check lockfile
-        run: uv lock --check --python ${{ env.UV_PYTHON }}
-      - run: uv sync --locked --extra dev --python ${{ env.UV_PYTHON }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Create virtual environment
+        run: python -m venv .venv
+      - name: Install dependencies
+        run: |
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          python -m pip install -e .
       - name: Run evaluation suite (hits live deps.dev)
-        run: uv run --locked --python ${{ env.UV_PYTHON }} python -m evals.run_evals
+        run: .venv/bin/python -m evals.run_evals

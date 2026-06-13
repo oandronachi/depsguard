@@ -1,10 +1,18 @@
 import io
+import sys
 
 import pytest
 
 pytest.importorskip("langgraph")
 
 from examples import langgraph_dependency_gate as gate
+
+
+def test_stdio_defaults_use_active_python_interpreter():
+    args = gate.parse_args(["pypi", "urllib3", "1.26.4"])
+
+    assert args.server_command == sys.executable
+    assert args.server_arg is None
 
 
 class _TtyEof(io.StringIO):

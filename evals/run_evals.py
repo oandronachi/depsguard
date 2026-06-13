@@ -7,8 +7,8 @@ ecosystems, and an internal-consistency invariant on the guardrail. It prints
 per-case results plus aggregate metrics and exits non-zero on any failure, so it
 doubles as an automated feedback loop in CI.
 
-Run (hits live deps.dev):
-    uv run python -m evals.run_evals
+Run from the project virtual environment (hits live deps.dev):
+    python -m evals.run_evals
 """
 
 from __future__ import annotations
